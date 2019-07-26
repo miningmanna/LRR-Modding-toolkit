@@ -16,6 +16,22 @@ public class FLHFile {
 	public int lframes;
 	public ArrayList<BufferedImage> frames;
 	
+	public static FLHFile getFLHFileFromImages(ArrayList<BufferedImage> imgs) {
+		
+		if(imgs == null || imgs.size() == 0)
+			return null;
+		
+		FLHFile file = new FLHFile();
+		
+		file.frames = imgs;
+		file.lframes = imgs.size();
+		BufferedImage img1 = imgs.get(0);
+		file.width = img1.getWidth();
+		file.height = img1.getHeight();
+		
+		return file;
+	}
+	
 	public static FLHFile getFLHFile(InputStream in) throws IOException {
 		
 		FLHFile flh = new FLHFile();
