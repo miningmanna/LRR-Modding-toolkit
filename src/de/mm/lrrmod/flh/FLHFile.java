@@ -13,7 +13,7 @@ public class FLHFile {
 	
 	public int width;
 	public int height;
-	public int lframes;
+	private int lframes;
 	public ArrayList<BufferedImage> frames;
 	
 	public static FLHFile getFLHFileFromImages(ArrayList<BufferedImage> imgs) {

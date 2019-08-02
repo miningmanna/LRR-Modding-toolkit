@@ -1,16 +1,12 @@
 package de.mm.lrrmod;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import de.mm.lrrmod.bmp.BMPReindexTool;
 import de.mm.lrrmod.flh.FLHModTool;
-import de.mm.lrrmod.flh.FLHPreviewer;
 
 public class LRRModToolkit {
 	
@@ -28,7 +24,7 @@ public class LRRModToolkit {
 		
 	}
 	
-	public LRRModToolkit addTool(FLHModTool tool) {
+	public LRRModToolkit addTool(LRRModTool tool) {
 		if(tool != null) {
 			tools.add(tool);
 			toolTabs.addTab(tool.getName(), tool);
@@ -50,6 +46,7 @@ public class LRRModToolkit {
 		
 		new LRRModToolkit()
 			.addTool(new FLHModTool())
+			.addTool(new BMPReindexTool())
 		.run();
 		
 	}

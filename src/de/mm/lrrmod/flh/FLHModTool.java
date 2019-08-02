@@ -3,16 +3,14 @@ package de.mm.lrrmod.flh;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageFilter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -30,7 +28,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.ListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
@@ -258,7 +255,7 @@ public class FLHModTool extends LRRModTool {
 						readFile = flh;
 						filePreview.setImages(flh.frames);
 						filePreview.setVisible(true);
-						pFrame.setMaximum(flh.lframes-1);
+						pFrame.setMaximum(flh.frames.size()-1);
 						pFrame.setMajorTickSpacing(pFrame.getMaximum()/5);
 					}
 				}
@@ -560,6 +557,41 @@ public class FLHModTool extends LRRModTool {
 					makePreview.start();
 					mPausePlay.setText("||");
 				}
+			}
+		});
+		mSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int res = chooser.showSaveDialog(mFrame);
+				if(res != JFileChooser.APPROVE_OPTION)
+					return;
+				
+				File saveFile = chooser.getSelectedFile();
+				if(!saveFile.getName().toUpperCase().endsWith(".FLH"))
+					saveFile = new File(saveFile.getAbsolutePath() + ".flh");
+				
+				FLHFile toSave = new FLHFile();
+				ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
+				for(int i = 0; i < mFileArray.size(); i++)
+					images.add(i, mFileArray.get(i).image);
+				
+				toSave.frames = images;
+				toSave.width = images.get(0).getWidth();
+				toSave.height = images.get(0).getHeight();
+				
+				try {
+					
+					FileOutputStream out = new FileOutputStream(saveFile);
+					FLHFile.writeFlhFile(toSave, out);
+					out.close();
+					
+				} catch(Exception e1) {
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		ChangeListener mFrameListener = new ChangeListener() {
