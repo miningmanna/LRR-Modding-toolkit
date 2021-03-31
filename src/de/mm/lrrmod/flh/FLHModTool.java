@@ -244,7 +244,8 @@ public class FLHModTool extends LRRModTool {
 						in = new FileInputStream(chooser.getSelectedFile());
 						flh = FLHFile.getFLHFile(in);
 					} catch(Exception e) {
-						JOptionPane.showMessageDialog(FLHModTool.this, "Couldnt load file: " + f , "Failed loading", JOptionPane.ERROR_MESSAGE);
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(FLHModTool.this, "Couldnt load file: " + f , "Failed loading : " + e.getMessage(), JOptionPane.ERROR_MESSAGE);
 					} finally {
 						if(in != null)
 							try {

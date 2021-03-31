@@ -57,7 +57,7 @@ public class FLHFile {
 		short depth = getShortLE(header, offset);
 		if(depth != 16)
 			System.out.println("Expected 16 bit colors");
-		offset += 68; // Unimportend data
+		offset += 68; // Un-important data
 		
 		int offset1stFrame = getIntLE(header, offset);
 		offset += 4;
@@ -136,10 +136,10 @@ public class FLHFile {
 		
 		offset += 1;
 		
-		while((len-offset) > 0) {
-			byte repeat = seg[offset];
+		while(true) {
+			int repeat = seg[offset];
 			if(repeat < 0) {
-				repeat = (byte) (repeat * -1);
+				repeat = repeat * -1;
 				for(int i = 0; i < repeat; i++) {
 					int rgb = getARGBFrom555RGB(seg, offset+i*2+1);
 					
@@ -159,19 +159,15 @@ public class FLHFile {
 			}
 			
 			if(x >= w) {
-				x %= w;
+				x = 0;
 				y++;
-				if(y > flh.height)
+				if(y >= flh.height) {
+					System.out.println("?????");
 					break;
+				}
 				offset++;
 			}
 			
-		}
-		for(; y < flh.height; y++) {
-			for(; x < w; x++) {
-				res.setRGB(x, y, 0xFF000000);
-			}
-			x = 0;
 		}
 		
 		flh.frames.add(imageIndex, res);
@@ -188,10 +184,9 @@ public class FLHFile {
 		
 		int y = 0;
 		int linesDone = 0;
-		while((len - offset) > 0) {
+		while(true) {
 			
 			if(llines == linesDone) {
-				System.out.println("Line already done. Unexpected data: " + (len-offset));
 				break;
 			}
 			
